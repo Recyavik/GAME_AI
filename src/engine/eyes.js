@@ -1,5 +1,5 @@
 // Зарядка для глаз (~3 минуты): через 20 минут игры — предложение сделать зарядку;
-// в любой момент — клавиша E или кнопка «Глаза». Игра на время зарядки стоит (окно-overlay).
+// в любой момент — Ctrl + E или кнопка «Глаза» (одиночная E рядом с WASD — легко нажать случайно). Игра на время зарядки стоит (окно-overlay).
 //
 // Экран: зверёк движется по траектории, внизу — лицо с большими глазами: зрачки следят
 // за зверьком, лицо моргает и зажмуривается вместе с игроком. Упражнения можно пропускать.
@@ -129,7 +129,7 @@ export function createEyes({ isBusy, art = {}, onComplete, onTick }) {
         h('p', {}, 'Ты играешь уже 20 минут. Сделаем зарядку для глаз — всего 3 минуты?'),
         h('div', { class: 'modal-btns center-row' },
           h('button', { class: 'btn', onclick: () => { close(); nextAt = playSec + REMIND_AFTER; } }, 'Пропустить'),
-          h('button', { class: 'btn', onclick: () => { close(); nextAt = playSec + LATER; toast('Напомню через 5 минут. Зарядка — клавиша E.', 'info', 3000); } }, 'Позже'),
+          h('button', { class: 'btn', onclick: () => { close(); nextAt = playSec + LATER; toast('Напомню через 5 минут. Зарядка — Ctrl + E.', 'info', 3000); } }, 'Позже'),
           h('button', { class: 'btn primary', onclick: () => { close(); open(); } }, 'Начать зарядку'),
         ),
       ),
@@ -240,7 +240,7 @@ export function createEyes({ isBusy, art = {}, onComplete, onTick }) {
     skip.onclick = () => { skipped = true; done += STEPS[i].sec; go(i + 1); };
     stop.onclick = () => finish(false);
     const onKey = (e) => {
-      if (e.code === 'Escape' || e.code === 'KeyE') { e.stopPropagation(); e.preventDefault(); finish(false); }
+      if (e.code === 'Escape' || (e.code === 'KeyE' && (e.ctrlKey || e.metaKey))) { e.stopPropagation(); e.preventDefault(); finish(false); }
       else if (e.code === 'Space' || e.code === 'ArrowRight') { e.stopPropagation(); e.preventDefault(); skip.onclick(); }
       else e.stopPropagation();
     };

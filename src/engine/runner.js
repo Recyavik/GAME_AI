@@ -220,7 +220,8 @@ export async function start(sc, buildWorld) {
     if (e.code === 'KeyF') { toggleFullscreen(); return; }
     if (!started) return;
     if (e.code === 'KeyM') actions.sound();
-    if (e.code === 'KeyE' && !eyes.running) { actions.eyes(); return; }
+    // Зарядка для глаз — Ctrl + E (одиночная E стоит рядом с W и D: легко промахнуться).
+    if (e.code === 'KeyE' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); if (!eyes.running) actions.eyes(); return; }
     if (document.querySelector('.overlay')) return;
     if (e.code === 'KeyG') actions.auto();
     if (e.code === 'KeyB') actions.notebook();

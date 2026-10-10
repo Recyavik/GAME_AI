@@ -41,7 +41,7 @@ export class Hud {
         h('i', { class: 'dock-sep' }),
         this.soundBtn,
         btn('⛶', 'Экран', 'F', actions.fullscreen),
-        h('button', { class: 'tbtn eyes-tbtn', onclick: () => actions.eyes?.(), title: 'Зарядка для глаз (E)', html: '<span class="ti"><svg viewBox="0 0 32 16" width="26" height="14"><ellipse cx="8" cy="8" rx="7" ry="6.5" fill="#fff" stroke="#30344a" stroke-width="1.6"/><ellipse cx="24" cy="8" rx="7" ry="6.5" fill="#fff" stroke="#30344a" stroke-width="1.6"/><circle cx="9" cy="8.5" r="3.4" fill="#2f7fe0"/><circle cx="25" cy="8.5" r="3.4" fill="#2f7fe0"/><circle cx="8" cy="7.2" r="1.1" fill="#fff"/><circle cx="24" cy="7.2" r="1.1" fill="#fff"/></svg><b class="eyes-min" title="Минут до зарядки для глаз"></b></span><span class="tt">Глаза</span><kbd>E</kbd>' }),
+        h('button', { class: 'tbtn eyes-tbtn', onclick: () => actions.eyes?.(), title: 'Зарядка для глаз (Ctrl + E)', html: '<span class="ti"><svg viewBox="0 0 32 16" width="26" height="14"><ellipse cx="8" cy="8" rx="7" ry="6.5" fill="#fff" stroke="#30344a" stroke-width="1.6"/><ellipse cx="24" cy="8" rx="7" ry="6.5" fill="#fff" stroke="#30344a" stroke-width="1.6"/><circle cx="9" cy="8.5" r="3.4" fill="#2f7fe0"/><circle cx="25" cy="8.5" r="3.4" fill="#2f7fe0"/><circle cx="8" cy="7.2" r="1.1" fill="#fff"/><circle cx="24" cy="7.2" r="1.1" fill="#fff"/></svg><b class="eyes-min" title="Минут до зарядки для глаз"></b></span><span class="tt">Глаза</span><kbd>Ctrl E</kbd>' }),
       ),
       this.autoBtn,
     );
