@@ -34,16 +34,56 @@
 «Продолжить» — с того же места (сохранение в браузере; если данные браузера стёрты, игра начнётся
 заново). В конце игры кнопка «Закрыть игру» закрывает вкладку. Любое окно закрывается клавишей Esc.
 
-## Сборка из исходников
+## Что установить
 
-Нужен **Node.js 20+** (https://nodejs.org, LTS).
+**Чтобы играть**, ничего устанавливать не нужно — только браузер (Chrome, Edge или Яндекс.Браузер).
+
+**Чтобы менять и собирать игру** (разработчику), нужны программы ниже. Достаточно Node.js и Git;
+остальные — для отдельных задач.
+
+| Программа | Зачем | Скачать | Установка в Windows (командой) |
+|---|---|---|---|
+| **Node.js 20+** (лучше LTS) | сборка игры, dev-сервер, проверки — **обязательно** | https://nodejs.org/ru/download | `winget install OpenJS.NodeJS.LTS` |
+| **Git** | скачать проект и сохранять изменения — **обязательно** | https://git-scm.com/downloads | `winget install Git.Git` |
+| Python 3 | архив выпуска (`tools/make_release.py`) | https://www.python.org/downloads/ | `winget install Python.Python.3.12` |
+| FFmpeg | подготовка записей голоса (`npm run assets`) | https://ffmpeg.org/download.html (для Windows — сборки gyan.dev) | `winget install Gyan.FFmpeg` |
+| Google Chrome или Microsoft Edge | сквозной тест (`npm run test:e2e`); Edge уже есть в Windows | https://www.google.com/chrome/ | `winget install Google.Chrome` |
+| Visual Studio Code (по желанию) | редактор кода; проект уже содержит его настройки | https://code.visualstudio.com/ | `winget install Microsoft.VisualStudioCode` |
+
+`winget` встроен в Windows 10/11 (команды выполняются в «Терминале» или PowerShell). После установки
+закройте и снова откройте терминал, затем проверьте версии:
+
+```bash
+node -v      # v20 или новее
+npm -v
+git --version
+python --version   # если нужен архив выпуска
+ffmpeg -version    # если готовите голоса
+```
+
+<details>
+<summary>macOS и Linux</summary>
+
+```bash
+# macOS (Homebrew: https://brew.sh)
+brew install node git python ffmpeg
+# Ubuntu / Debian
+sudo apt install git python3 ffmpeg
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt install -y nodejs
+```
+</details>
+
+## Сборка из исходников
 
 ```bash
 git clone https://github.com/Recyavik/GAME_AI.git
 cd GAME_AI
-npm ci                      # зависимости строго по package-lock.json
+npm ci                      # библиотеки проекта строго по package-lock.json (нужен интернет, один раз)
 npm run build -- TEMA_1     # → dist/TEMA_1.html и TEMA_1.html в корне
 ```
+
+`npm ci` сам скачивает все библиотеки проекта (three.js, Vite, шрифты, sharp, puppeteer-core) в папку
+`node_modules` — отдельно их ставить не нужно. Готовая игра потом работает без интернета.
 
 Живая разработка с автообновлением: `npm run dev -- TEMA_1`.
 

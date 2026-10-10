@@ -1,7 +1,7 @@
 {
   "name": "game-ai",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Интерактивная лаборатория ИИ: 3D-квесты к курсу «ИИ и информационная безопасность»",
   "type": "module",
   "scripts": {

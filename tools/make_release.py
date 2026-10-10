@@ -2,7 +2,7 @@
 """Упаковка выпуска в releases/ai-quest-NNN.zip с НОВЫМ порядковым номером.
 
 Использование:
-    python tools/make_release.py                 # все dist/*.html + методички
+    python tools/make_release.py                 # все dist/*.html + методички + README
     python tools/make_release.py l10-57-pass     # только указанные игры
     python tools/make_release.py --with файл.md  # добавить файл (задание, заметку) в папку «Задания/»
     python tools/make_release.py --check dist/x.html   # проверить файл на внешние ссылки
@@ -68,6 +68,10 @@ def collect(slugs: list[str]) -> list[tuple[Path, str]]:
         teacher = GAMES / h.stem / "teacher.md"
         if teacher.exists():
             files.append((teacher, f"{h.stem}/Методичка_{h.stem}.md"))
+    # README — как запустить игру и что установить разработчику (ссылки и команды).
+    readme = ROOT / "README.md"
+    if readme.exists():
+        files.append((readme, "README.md"))
     return files
 
 
