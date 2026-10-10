@@ -1,0 +1,31 @@
+# Зависимости и сборка — восстанавливаются командами npm ci и npm run build -- <TEMA_N>
+node_modules/
+dist/
+.vite/
+
+# Выпуски-архивы (собирает tools/make_release.py)
+releases/*.zip
+
+# Любые архивы (стартовые наборы, комплекты картинок от генератора)
+*.zip
+*.7z
+*.rar
+
+# Исходники ассетов (большие PNG, записи голоса) — хранятся у автора.
+# В репозиторий идут готовые веб-версии: games/TEMA_N/assets/ (WebP).
+assets_*/
+
+# Справочные материалы автора (хранятся локально)
+reference/
+
+# Временные файлы
+_harness.html
+tools/_*.mjs
+*.log
+*.tmp
+
+# Системное
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/

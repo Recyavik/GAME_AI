@@ -1,0 +1,19 @@
+# Единые окончания строк у всех, кто клонирует проект (Windows / macOS / Linux).
+* text=auto eol=lf
+*.bat text eol=crlf
+
+# Двоичные файлы
+*.png binary
+*.webp binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.mp3 binary
+*.m4a binary
+*.wav binary
+*.ogg binary
+*.woff2 binary
+*.zip binary
+
+# Собранные игры в корне: генерируются сборкой, построчно не сравниваются
+/TEMA_*.html -diff linguist-generated

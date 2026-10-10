@@ -1,0 +1,35 @@
+{
+  "name": "game-ai",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Интерактивная лаборатория ИИ: 3D-квесты к курсу «ИИ и информационная безопасность»",
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/run.mjs dev",
+    "build": "node tools/run.mjs build",
+    "build:all": "node tools/run.mjs build --all",
+    "games": "node tools/run.mjs list",
+    "assets": "node tools/prep_assets.mjs",
+    "check": "node tools/check.mjs",
+    "test:e2e": "node tools/e2e.mjs",
+    "test": "node tools/check.mjs && node tools/run.mjs build --all && node tools/e2e.mjs dist/TEMA_1.html"
+  },
+  "dependencies": {
+    "@fontsource/golos-text": "^5.1.0",
+    "@fontsource/unbounded": "^5.1.0",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.13.0",
+    "sharp": "^0.35.5",
+    "vite": "^6.0.0",
+    "vite-plugin-singlefile": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Recyavik/GAME_AI.git"
+  }
+}
