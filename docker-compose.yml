@@ -1,0 +1,15 @@
+# Локальная проверка сайта игры:  docker compose up --build  →  http://localhost:8090
+# Другой порт на компьютере:       SITE_PORT=8181 docker compose up --build
+services:
+  game:
+    build: .
+    image: festival-ai:latest
+    container_name: festival-ai
+    ports:
+      - "${SITE_PORT:-8090}:8080"   # снаружи:внутри контейнера
+    volumes:
+      - counter-data:/data   # счётчик «В игру сыграли»
+    restart: unless-stopped
+
+volumes:
+  counter-data:

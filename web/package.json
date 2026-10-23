@@ -1,0 +1,8 @@
+{
+  "name": "game-ai-web",
+  "private": true,
+  "type": "module",
+  "description": "Сайт игры: стартовая страница, игра и счётчик посещений (без зависимостей)",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=20" }
+}

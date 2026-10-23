@@ -1,0 +1,15 @@
+# В образ попадает только то, что перечислено в Dockerfile; остальное не отправляем Docker.
+node_modules
+dist
+releases
+assets_*
+reference
+.git
+.vite
+.vscode
+docs
+tools
+src
+web/data
+*.zip
+*.log

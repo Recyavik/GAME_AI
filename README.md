@@ -129,6 +129,25 @@ npm run build -- TEMA_1     # → dist/TEMA_1.html и TEMA_1.html в корне
 
 Живая разработка с автообновлением: `npm run dev -- TEMA_1`.
 
+### Сайт игры на сервере (Docker)
+
+Стартовая страница (описание для ученика, герои, блоки «Учителю» и «Разработчику», счётчик
+«В игру сыграли») и сама игра — в одном контейнере. Регистрации нет: несколько человек играют
+одновременно, у каждого своё сохранение в его браузере.
+
+Нужен **Docker Desktop** (https://www.docker.com/products/docker-desktop/, `winget install Docker.DockerDesktop`).
+
+```bash
+docker compose up --build -d     # собрать и запустить → http://localhost:8090
+docker compose logs -f           # журнал
+docker compose down              # остановить (счётчик сохранится в томе counter-data)
+```
+
+Порт меняется так: `SITE_PORT=8181 docker compose up --build -d`. Без Docker: `node web/server.js`
+(Node.js 20+, порт 8080, переменные `PORT`, `DATA_DIR`). Файлы сайта — в папке `web/`:
+`web/public` — страница, `web/server.js` — сервер и счётчик, игра берётся из `TEMA_1.html`.
+На сервере с доменом контейнер обычно ставят за nginx/Caddy с HTTPS.
+
 ### Команды
 
 | Команда | Что делает |

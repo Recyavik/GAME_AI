@@ -29,3 +29,6 @@ tools/_*.mjs
 Thumbs.db
 desktop.ini
 .idea/
+
+# Данные сайта при локальном запуске (счётчик)
+web/data/
