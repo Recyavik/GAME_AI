@@ -32,6 +32,7 @@ import { createLife } from './life.js';
 import { createEyes } from './eyes.js';
 import { setHero, sleep, h } from './util.js';
 import { loadSave, writeSave, clearSave } from './save.js';
+import { playedMarks, reportPlayed } from './played.js';
 
 export async function start(sc, buildWorld) {
   const theme = sc.meta.theme || 'light';
@@ -39,6 +40,8 @@ export async function start(sc, buildWorld) {
   if (sc.meta.accent) document.documentElement.style.setProperty('--accent', sc.meta.accent);
   if (sc.meta.accent2) document.documentElement.style.setProperty('--accent2', sc.meta.accent2);
   document.title = sc.meta.title;
+  // Значок вкладки — встроенная картинка из сценария (без него браузер на сайте запрашивает /favicon.ico).
+  if (sc.meta.icon) document.head.append(h('link', { rel: 'icon', href: sc.meta.icon }));
 
   const core = createCore(theme);
   const W = new WorldBuilder(core.scene);
@@ -116,6 +119,7 @@ export async function start(sc, buildWorld) {
   const actsLog = []; // выполненные действия мира (шлюз, телефон…) — чтобы повторить их при «Продолжить»
   let saving = false; // сохраняем, пока идёт игра (после финала — нет)
   let exitArmed = true, exitAsking = false; // окно «Выйти из игры?» у дверей школы
+  const reported = new Set(); // отметки счётчика сайта, уже отправленные в этом прохождении (half, done)
 
   // Общий контекст для виджетов станций.
   const ctx = {
@@ -338,6 +342,7 @@ export async function start(sc, buildWorld) {
       if (target === i) target = null;
       const doneN = st.filter((s) => s.done).length;
       if (doneN < st.length) toast(`Станция выполнена! Готово ${doneN} из ${st.length}.`, 'info', 3000);
+      for (const m of playedMarks(sc, st)) if (!reported.has(m)) { reported.add(m); reportPlayed(sc, m); }
     }
     save();
     for (const m of Object.values(npcs)) m.userData.faceYaw = null;
@@ -543,6 +548,7 @@ export async function start(sc, buildWorld) {
       life: life?.save(),
       eyes: eyes.save?.(),
       pos: [player.pos.x, player.pos.z, player.yaw],
+      reported: [...reported],
     });
   }
 
@@ -552,6 +558,7 @@ export async function start(sc, buildWorld) {
     Object.assign(state, s.state || {});
     s.st.forEach((x, i) => { if (st[i]) Object.assign(st[i], x); });
     target = s.target ?? null;
+    for (const m of s.reported || []) reported.add(m);
     for (const name of s.acts || []) { actsLog.push(name); await doAct(name, true); }
     for (const [id, [x, z, yaw, vis]] of Object.entries(s.npcs || {})) {
       const m = npcs[id];

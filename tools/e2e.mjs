@@ -4,6 +4,8 @@
 //   node tools/e2e.mjs [dist/TEMA_1.html] [--hero 2] [--shots папка] [--size 1366x768] [--resume N]
 // --resume N — после N выполненных станций перезагрузить страницу и нажать «Продолжить»:
 // прогресс, документы и станции должны вернуться.
+// --url http://localhost:8090/game/TEMA_1.html — играть с сайта (запросы к нему же разрешены);
+// игра должна отправить ровно две отметки счётчика /api/played: half и done.
 // Нужен установленный Chrome, Edge или Яндекс.Браузер (путь можно задать в переменной CHROME).
 import puppeteer from 'puppeteer-core';
 import { existsSync, mkdirSync } from 'node:fs';
@@ -14,6 +16,8 @@ const opt = (name, def) => { const i = argv.indexOf('--' + name); return i >= 0 
 const file = resolve(argv.find((a, i) => !a.startsWith('--') && !argv[i - 1]?.startsWith('--')) || 'dist/TEMA_1.html');
 const hero = +opt('hero', 1);
 const resumeAt = +opt('resume', 0);
+const siteUrl = opt('url', '');
+const played = []; // отметки счётчика, отправленные игрой
 const shots = opt('shots', null);
 const [W, H] = opt('size', '1366x768').split('x').map(Number);
 if (shots) mkdirSync(shots, { recursive: true });
@@ -38,7 +42,11 @@ const problems = [];
 browser.on('targetcreated', (tg) => { if (tg.type() === 'page') problems.push('игра открыла новую вкладку: ' + tg.url()); });
 page.on('console', (m) => { if (m.type() === 'error') problems.push('console.error: ' + m.text()); });
 page.on('pageerror', (e) => problems.push('ошибка JS: ' + e.message));
-page.on('request', (r) => { if (/^https?:/.test(r.url())) problems.push('внешний запрос: ' + r.url()); });
+page.on('request', (r) => {
+  const u = r.url();
+  if (siteUrl && new URL(u).origin === new URL(siteUrl).origin) { if (u.endsWith('/api/played')) played.push(JSON.parse(r.postData() || '{}').mark); return; }
+  if (/^https?:/.test(u)) problems.push('внешний запрос: ' + u);
+});
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const $click = (sel) => page.evaluate((s) => { const e = document.querySelector(s); if (e && !e.disabled) { e.click(); return true; } return false; }, sel);
@@ -53,7 +61,7 @@ const snap = async (name) => { if (shots) await page.screenshot({ path: `${shots
 const NEXT = /^(Взять щит|Дальше|Готово|Войти|Выступить|Получить пропуск|Получить билет|Итог|Следующий совет|Следующий слух|Следующая фраза|Дальше: разрешения)/;
 const fail = async (why) => { console.log('✗ ' + why); await snap('FAIL'); await browser.close(); process.exit(1); };
 
-await page.goto('file:///' + file.replace(/\\/g, '/'));
+await page.goto(siteUrl || 'file:///' + file.replace(/\\/g, '/'));
 await sleep(2500);
 await snap('00_title');
 if (hero === 2) await page.evaluate(() => document.querySelectorAll('.hero-btn')[1]?.click());
@@ -172,6 +180,10 @@ await browser.close();
 
 console.log(`  итог финала: ${stats}`);
 console.log(`  окон станций: ${stations.length}, отклонено неверных ответов: ${rejected}, вопросов теста: ${quizN}`);
+if (siteUrl) {
+  console.log('  отметки счётчика: ' + (played.join(', ') || 'нет'));
+  if (played.join() !== 'half,done') problems.push('ожидались отметки счётчика half, done');
+}
 if (problems.length) { console.log('✗ Проблемы:\n  ' + [...new Set(problems)].join('\n  ')); process.exit(1); }
 console.log('✓ Игра пройдена от титула до теста без ошибок');
 

@@ -1,4 +1,4 @@
-// Сервер сайта игры: стартовая страница, сама игра и счётчик «В игру сыграли».
+// Сервер сайта игры: стартовая страница, сама игра и счётчик «в игру играли» (прохождения половины и всей игры).
 // Без внешних библиотек — только Node.js 20+.
 //
 //   node web/server.js            → http://localhost:8080
@@ -8,8 +8,8 @@
 //   /                    стартовая страница (web/public)
 //   /game/TEMA_1.html    игра (готовый файл из корня проекта)
 //   /img/<группа>/<файл> картинки игры (games/TEMA_1/assets) — портреты героев и т. п.
-//   POST /api/visit      +1 к счётчику, ответ { count }
-//   GET  /api/visits     текущее значение { count }
+//   POST /api/played     от игры: { mark: 'half' | 'done' } — прошёл половину станций / все; +1 к счётчику
+//   GET  /api/visits     текущее значение { count } (для стартовой страницы)
 //   GET  /api/health     для проверки контейнера
 //
 // Сохранение игры у каждого игрока своё — в его браузере (localStorage), сервер его не хранит.
@@ -65,6 +65,29 @@ function saveSoon() {
   }, 1000);
 }
 
+// Защита от накрутки: с одного адреса каждая отметка (half/done) засчитывается не чаще раза в 5 минут —
+// честное прохождение половины станций занимает дольше.
+const THROTTLE_MS = 5 * 60 * 1000;
+const lastMark = new Map(); // «адрес:отметка» → время
+function throttled(key) {
+  const now = Date.now();
+  if (now - (lastMark.get(key) || 0) < THROTTLE_MS) return true;
+  lastMark.set(key, now);
+  if (lastMark.size > 5000) for (const [k, t] of lastMark) if (now - t >= THROTTLE_MS) lastMark.delete(k);
+  return false;
+}
+// За прокси хостинга (Coolify, nginx) настоящий адрес игрока — первый в X-Forwarded-For.
+const clientIp = (req) => String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || '';
+// Тело запроса — маленькое, больше 1 КБ не читаем.
+function readBody(req) {
+  return new Promise((resolve) => {
+    let data = '';
+    req.on('data', (c) => { data += c; if (data.length > 1024) { req.destroy(); resolve(''); } });
+    req.on('end', () => resolve(data));
+    req.on('error', () => resolve(''));
+  });
+}
+
 // ---------- статика ----------
 // Сжатые версии кешируются в памяти (игра — 6 МБ, в gzip меньше, а сжимать её на каждый запрос дорого).
 const cache = new Map(); // путь → { mtime, raw, gz, br }
@@ -93,6 +116,7 @@ function resolveFile(urlPath) {
   };
   if (urlPath === '/game/TEMA_1.html' || urlPath === '/game/' || urlPath === '/game') return path.join(ROOT, 'TEMA_1.html');
   if (urlPath.startsWith('/img/')) return inside(ASSETS, urlPath.slice(5));
+  if (urlPath === '/favicon.ico') return path.join(PUBLIC, 'favicon.png'); // старые браузеры просят .ico сами
   const rel = urlPath === '/' ? 'index.html' : urlPath.slice(1);
   return inside(PUBLIC, rel);
 }
@@ -134,9 +158,12 @@ const server = http.createServer(async (req, res) => {
   try { url = new URL(req.url, 'http://localhost'); } catch { return send(res, 400, { error: 'bad url' }); }
   const p = decodeURIComponent(url.pathname);
 
-  if (p === '/api/visit' && req.method === 'POST') {
-    visits += 1;
-    saveSoon();
+  if (p === '/api/played' && req.method === 'POST') {
+    const body = await readBody(req);
+    let mark = null;
+    try { mark = JSON.parse(body).mark; } catch { /* не JSON */ }
+    if (mark !== 'half' && mark !== 'done') return send(res, 400, { error: 'bad mark' });
+    if (!throttled(clientIp(req) + ':' + mark)) { visits += 1; saveSoon(); }
     return send(res, 200, { count: visits });
   }
   if (p === '/api/visits' && req.method === 'GET') return send(res, 200, { count: visits });

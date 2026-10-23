@@ -2,12 +2,12 @@
 import { HEROES } from './heroes.js';
 
 // ---------- счётчик «в игру играли» (карточка в полосе цифр) ----------
-// Каждое открытие страницы — +1 (так решено: считаем все посещения, даже повторные).
-// Без сервера (страница открыта файлом) счётчик просто не показывается.
+// Страница счётчик только показывает. Увеличивает его сама игра: +1, когда игрок выполнил половину
+// станций (4 из 7), и ещё +1, когда выполнил все. Без сервера (страница открыта файлом) счётчика нет.
 async function counter() {
   if (location.protocol === 'file:') return;
   try {
-    const r = await fetch('/api/visit', { method: 'POST' });
+    const r = await fetch('/api/visits');
     if (!r.ok) return;
     const { count } = await r.json();
     const box = document.getElementById('counter');

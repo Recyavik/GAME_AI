@@ -6,6 +6,7 @@
 // (без намёка на правильный); у верного — разбор. Везде 4 варианта, порядок перемешивается.
 import { IMG } from './images.js';
 import { VOICE } from './voice.js';
+import favicon from './assets/favicon.png';
 
 const P = IMG.portraits;
 const OWL = { name: 'Совёнок', img: IMG.owl.normal };
@@ -14,6 +15,7 @@ export default {
   meta: {
     level: '11+', // возраст игрока (сложность текстов — как для 11–13 лет)
     slug: 'TEMA_1',
+    icon: favicon, // значок вкладки браузера (Совёнок 64×64)
     title: 'Фестиваль ИИ: правда и слухи',
     subtitle: '3D-квест, возраст 11+',
     intro:
