@@ -5,6 +5,7 @@
     python tools/make_release.py                 # все dist/*.html + методички + README
     python tools/make_release.py l10-57-pass     # только указанные игры
     python tools/make_release.py --with файл.md  # добавить файл (задание, заметку) в папку «Задания/»
+    python tools/make_release.py --site          # + папка «Сайт/»: всё для docker compose up (страница, сервер, игра)
     python tools/make_release.py --check dist/x.html   # проверить файл на внешние ссылки
 
 Правила выпуска:
@@ -75,6 +76,22 @@ def collect(slugs: list[str]) -> list[tuple[Path, str]]:
     return files
 
 
+# Файлы сайта для сервера: распаковать папку «Сайт» и выполнить в ней docker compose up --build -d.
+SITE_FILES = ["Dockerfile", "docker-compose.yml", ".dockerignore", "TEMA_1.html", "README.md"]
+SITE_DIRS = ["web/public", "games/TEMA_1/assets/portraits", "games/TEMA_1/assets/owl",
+             "games/TEMA_1/assets/icons", "games/TEMA_1/assets/posters"]
+
+
+def site_files() -> list[tuple[Path, str]]:
+    out = [(ROOT / f, f"Сайт/{f}") for f in SITE_FILES]
+    out += [(ROOT / "web" / f, f"Сайт/web/{f}") for f in ("server.js", "package.json")]
+    for d in SITE_DIRS:
+        for f in sorted((ROOT / d).rglob("*")):
+            if f.is_file():
+                out.append((f, "Сайт/" + f.relative_to(ROOT).as_posix()))
+    return out
+
+
 def main() -> None:
     args = sys.argv[1:]
     if args[:1] == ["--check"]:
@@ -91,7 +108,12 @@ def main() -> None:
         i = args.index("--with")
         extra.append(Path(args[i + 1]))
         del args[i:i + 2]
+    site = "--site" in args
+    if site:
+        args.remove("--site")
     files = collect(args)
+    if site:
+        files += site_files()
     for e in extra:
         if not e.exists():
             sys.exit(f"Нет файла {e}")
