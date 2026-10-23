@@ -4,10 +4,6 @@ import { HEROES } from './heroes.js';
 // ---------- счётчик ----------
 // Каждое открытие страницы — +1 (так решено: считаем все посещения, даже повторные).
 // Без сервера (страница открыта файлом) счётчик просто не показывается.
-const word = (n) => {
-  const a = n % 10, b = n % 100;
-  return a >= 2 && a <= 4 && (b < 12 || b > 14) ? 'раза' : 'раз';
-};
 async function counter() {
   if (location.protocol === 'file:') return;
   try {
@@ -16,7 +12,6 @@ async function counter() {
     const { count } = await r.json();
     const box = document.getElementById('counter');
     const num = document.getElementById('counter-num');
-    document.getElementById('counter-word').textContent = word(count);
     box.classList.remove('hidden');
     const fmt = new Intl.NumberFormat('ru-RU');
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
