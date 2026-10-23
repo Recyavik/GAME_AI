@@ -3,7 +3,7 @@
 FROM node:22-alpine
 
 WORKDIR /app
-ENV NODE_ENV=production PORT=8080 DATA_DIR=/data
+ENV NODE_ENV=production PORT=8080 DATA_DIR=/data RUN_AS_UID=1000
 
 # Сервер и стартовая страница.
 COPY web/ ./web/
@@ -16,7 +16,7 @@ COPY games/TEMA_1/assets/posters ./games/TEMA_1/assets/posters
 
 # Счётчик хранится в томе /data — не обнуляется при пересборке и перезапуске.
 RUN mkdir -p /data && chown node:node /data
-USER node
+# USER не задаём: сервер сам отдаёт /data пользователю node (uid 1000) и понижает права при старте.
 VOLUME ["/data"]
 EXPOSE 8080
 

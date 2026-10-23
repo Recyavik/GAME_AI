@@ -39,7 +39,18 @@ const COMPRESS = new Set(['.html', '.css', '.js', '.json', '.svg', '.txt']);
 let visits = 0;
 let saveTimer = null;
 fs.mkdirSync(DATA_DIR, { recursive: true });
+// В контейнере сервер стартует от root только для того, чтобы отдать папку данных пользователю node
+// (хостинг может подключить том, принадлежащий root), и сразу понижает права.
+if (process.getuid?.() === 0 && process.env.RUN_AS_UID) {
+  const uid = Number(process.env.RUN_AS_UID);
+  try { fs.chownSync(DATA_DIR, uid, uid); for (const f of fs.readdirSync(DATA_DIR)) fs.chownSync(path.join(DATA_DIR, f), uid, uid); }
+  catch (e) { console.error('Не удалось выдать права на папку данных:', e.message); }
+  process.setgid(uid); process.setuid(uid);
+}
 try { visits = Number(JSON.parse(fs.readFileSync(COUNTER_FILE, 'utf8')).count) || 0; } catch { visits = 0; }
+// Проверка записи при старте: если папка недоступна, счётчик будет обнуляться — пишем об этом в лог сразу.
+let writable = true;
+try { fs.accessSync(DATA_DIR, fs.constants.W_OK); } catch { writable = false; }
 
 // Запись не чаще раза в секунду, через временный файл (не повредится при сбое).
 function saveSoon() {
@@ -129,7 +140,7 @@ const server = http.createServer(async (req, res) => {
     return send(res, 200, { count: visits });
   }
   if (p === '/api/visits' && req.method === 'GET') return send(res, 200, { count: visits });
-  if (p === '/api/health') return send(res, 200, { ok: true });
+  if (p === '/api/health') return send(res, 200, { ok: true, count: visits, saved: writable });
   if (p.startsWith('/api/')) return send(res, 404, { error: 'not found' });
 
   if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, { error: 'method not allowed' });
@@ -138,6 +149,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Сайт игры: http://localhost:${PORT}  (счётчик: ${visits}, данные: ${DATA_DIR})`);
+  if (!writable) console.error(`ВНИМАНИЕ: нет права записи в ${DATA_DIR} — счётчик не сохранится после перезапуска.`);
 });
 
 // Аккуратная остановка (docker stop): дописать счётчик на диск.
