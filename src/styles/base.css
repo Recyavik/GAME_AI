@@ -302,3 +302,22 @@ kbd { font-family: var(--text); font-weight: 600; font-size: 0.75em; padding: 0.
 body, #ui { -webkit-user-select: none; user-select: none; }
 img, canvas, svg { -webkit-user-drag: none; user-drag: none; }
 input, textarea { -webkit-user-select: text; user-select: text; }
+
+/* Титул на невысоких окнах (ноутбуки 13–16″ с масштабом): сова, герои и отступы меньше, всё влезает без прокрутки. */
+@media (max-height: 760px) {
+  .title-card { padding: 1.1em 1.6em; }
+  .title-logo { width: 5em; margin-top: -0.3em; }
+  .title-card h1 { font-size: 1.7em; margin: 0.2em 0 0.4em; }
+  .title-intro { font-size: 0.98em; margin-bottom: 0.7em; }
+  .hero-btn img { width: 4.4em; height: 4.4em; }
+  .hero-pick, .keys { margin-bottom: 0.7em; }
+}
+@media (max-height: 640px) {
+  .title-card { padding: 0.8em 1.4em; }
+  .title-logo { width: 3.6em; margin-top: 0; }
+  .plaque { margin-bottom: 0.4em; }
+  .title-card h1 { font-size: 1.5em; }
+  .title-intro { font-size: 0.92em; }
+  .hero-btn img { width: 3.6em; height: 3.6em; }
+  .keys { gap: 0.3em 0.8em; }
+}
