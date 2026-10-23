@@ -397,7 +397,7 @@ export async function start(sc, buildWorld) {
     const rows = sc.stages.map((s, i) => {
       const S = st[i];
       const state = S.done ? ['done', '✓ выполнено'] : !available(i) ? ['locked', 'закрыто: ' + (s.lockedHint || '')]
-        : i === cur ? ['cur', '★ текущая цель' + (S.resume ? ' · начата, продолжится с того же места' : '')]
+        : i === cur ? ['cur', '★ текущая цель' + (S.resume ? ' (начата, продолжится с того же места)' : '')]
           : S.resume ? ['started', '◐ начата — продолжится с того же места'] : ['open', 'доступна'];
       const pick = !S.done && available(i) && i !== cur
         ? h('button', { class: 'btn small primary', onclick: () => { target = i; disarmed.delete(i); close(); toast(`Новая цель: ${s.title}`, 'info', 2500); if (arriveFn) refreshTargets(); } }, 'Сделать целью')
@@ -478,7 +478,7 @@ export async function start(sc, buildWorld) {
       } else if (it.act) {
         await doAct(it.act);
       } else if (it.station) {
-        const sd = { title: `Станция ${stage.station} · ${stage.stationName || stage.title}`, ...it.station };
+        const sd = { title: `Станция ${stage.station}: ${stage.stationName || stage.title}`, ...it.station };
         // Разминка: данные карточек — общие с «Было — стало» (sc.warmup).
         if (it.station.warmup) sd.data = { ...sc.warmup, ...it.station.data };
         const r = await runStation(sd, ctx);

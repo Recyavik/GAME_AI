@@ -54,7 +54,7 @@ export default function redFlags(el, d, api) {
   const site = h('div', { class: 'rf-site' },
     z('url', h('div', { class: 'rf-url' }, h('span', { class: 'rf-lock' }, 'ⓘ'), d.url)),
     h('div', { class: 'rf-page' },
-      h('div', { class: 'rf-nav' }, z('logo', h('span', { class: 'rf-logo' }, '★ GAME-PRO')), z('menu', h('span', { class: 'rf-menu' }, 'Главная · О нас · Помощь'))),
+      h('div', { class: 'rf-nav' }, z('logo', h('span', { class: 'rf-logo' }, '★ GAME-PRO')), z('menu', h('span', { class: 'rf-menu' }, ...['Главная', 'О нас', 'Помощь'].map((t) => h('span', {}, t))))),
       z('title', h('div', { class: 'rf-title' }, d.title)),
       z('timer', h('div', { class: 'rf-timer' }, 'Акция закончится через ', timerEl)),
       h('div', { class: 'rf-form' }, d.fields.map((f, i) => z('f' + i, h('label', {}, f, h('span', { class: 'rf-input' }))))),

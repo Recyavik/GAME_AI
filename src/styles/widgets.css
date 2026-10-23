@@ -246,6 +246,7 @@
 .rf-url { background: #eceff5; padding: 0.4em 0.7em; font-family: monospace; display: flex; gap: 0.4em; }
 .rf-page { padding: 0.6em 0.8em; background: linear-gradient(160deg, #ffe600, #ff3d7f); display: flex; flex-direction: column; gap: 0.45em; }
 .rf-nav { display: flex; justify-content: space-between; font-weight: 700; }
+.rf-menu span + span { margin-left: 1.2em; }
 .rf-title { font: 700 1.25em var(--display); color: #fff; text-shadow: 0 2px 0 #b5005b; }
 .rf-timer { background: #000; color: #ffe600; padding: 0.3em 0.6em; border-radius: 0.4em; font-weight: 700; align-self: flex-start; }
 .rf-form { display: flex; flex-direction: column; gap: 0.3em; background: #ffffffcc; padding: 0.5em; border-radius: 0.5em; }

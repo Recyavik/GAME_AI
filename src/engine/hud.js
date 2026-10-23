@@ -45,7 +45,7 @@ export class Hud {
       ),
       this.autoBtn,
     );
-    this.helpLine = h('div', { class: 'help-line' }, 'Клик или WASD — идти · G — к цели · колесо — зум · зажми колесо и веди — поворот · Esc — закрыть окно');
+    this.helpLine = h('div', { class: 'help-line' }, 'Клик или WASD — идти, G — к цели, колесо — зум, зажми колесо и веди — поворот, Esc — закрыть окно');
 
     // Метка цели.
     this.goalEl = h('div', { class: 'goal-marker hidden' }, h('span', { class: 'gm-arrow' }, '▼'), h('span', { class: 'gm-text' }));

@@ -190,7 +190,7 @@ export function createEyes({ isBusy, art = {}, onComplete, onTick }) {
       const t = (performance.now() - t0) / 1000;
       const total = done + Math.min(t, s.sec);
       bar.style.width = (total / TOTAL) * 100 + '%';
-      count.textContent = `упражнение ${i + 1} из ${STEPS.length} · осталось ${Math.max(0, Math.ceil(TOTAL - total))} с`;
+      count.textContent = `упражнение ${i + 1} из ${STEPS.length}, осталось ${Math.max(0, Math.ceil(TOTAL - total))} с`;
       // Поле полёта — свободная область между инструкцией и лицом (зверёк не прячется за текстом).
       const stg = field.parentElement.getBoundingClientRect();
       field.style.top = Math.max(8, panel.getBoundingClientRect().bottom - stg.top + 10) + 'px';

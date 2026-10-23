@@ -130,12 +130,12 @@ def main() -> None:
 
     out = next_name()
     stamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-    manifest = [f"Выпуск {out.name} · собран {stamp}", ""]
+    manifest = [f"Выпуск {out.name}, собран {stamp}", ""]
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for src, arc in files:
             z.write(src, arc)
             built = datetime.fromtimestamp(src.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
-            manifest.append(f"{arc}  ·  {src.stat().st_size // 1024} КБ  ·  {built}  ·  md5 {md5(src)[:8]}")
+            manifest.append(f"{arc}    {src.stat().st_size // 1024} КБ    собран {built}    md5 {md5(src)[:8]}")
         z.writestr("СОСТАВ_ВЫПУСКА.txt", "\n".join(manifest) + "\n")
 
     # Проверка: открываем архив заново и сверяем каждый файл с исходником.

@@ -31,7 +31,7 @@ export function showTitle(sc, saved = null) {
     // Есть сохранённая игра — предлагаем продолжить с того же места.
     const cont = saved && h('div', { class: 'title-continue' },
       h('img', { src: saved.hero.portrait, alt: '' }),
-      h('div', {}, h('b', {}, `Сохранённая игра: ${saved.hero.name}`), h('span', {}, `Выполнено ${saved.done} из ${saved.total} · очки ${saved.score}`)),
+      h('div', {}, h('b', {}, `Сохранённая игра: ${saved.hero.name}`), h('span', {}, `Выполнено ${saved.done} из ${saved.total}, очки: ${saved.score}`)),
       h('button', { class: 'btn primary', onclick: () => go(true) }, 'Продолжить ▶'),
     );
     const el = h('div', { class: 'title-screen' },

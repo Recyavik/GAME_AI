@@ -304,7 +304,7 @@ export function createLife({ core, W, F, player, npcs, hud, progress, sc }) {
     const card = h('div', { class: 'fact-pop' },
       f.img && h('img', { src: f.img, alt: '' }),
       h('div', { class: 'fact-body' },
-        h('div', { class: 'fact-kicker' }, `Знаешь ли ты? · ${progress.facts.size} из ${facts.length}`),
+        h('div', { class: 'fact-kicker' }, `Знаешь ли ты? Факт ${progress.facts.size} из ${facts.length}`),
         h('b', {}, f.title),
         h('p', { html: rich(f.text) }),
         h('div', { class: 'fact-foot' }, 'Факт сохранён в блокноте → «Энциклопедия»', h('button', { class: 'btn small', onclick: close }, 'Понятно')),
@@ -364,19 +364,19 @@ export function createLife({ core, W, F, player, npcs, hud, progress, sc }) {
       list.push({ el, get, w });
     };
     const R = 8;
-    add('Человек · 97 %', () => [P().x, 0, P().z, 1.55]);
+    add('Человек 97 %', () => [P().x, 0, P().z, 1.55]);
     for (const m of Object.values(npcs)) {
       if (!m.visible || Math.hypot(m.position.x - P().x, m.position.z - P().z) > R) continue;
       const pct = 90 + Math.floor(Math.random() * 9);
-      add(`Человек · ${pct} %`, () => [m.position.x, 0, m.position.z, m.userData.height + 0.2]);
+      add(`Человек ${pct} %`, () => [m.position.x, 0, m.position.z, m.userData.height + 0.2]);
     }
     for (const s of studs) {
       if (Math.hypot(s.m.position.x - P().x, s.m.position.z - P().z) > R) continue;
-      add(`Человек · ${92 + Math.floor(Math.random() * 7)} %`, () => [s.m.position.x, 0, s.m.position.z, s.m.userData.height + 0.15]);
+      add(`Человек ${92 + Math.floor(Math.random() * 7)} %`, () => [s.m.position.x, 0, s.m.position.z, s.m.userData.height + 0.15]);
     }
-    if (robo && Math.hypot(robo.g.position.x - P().x, robo.g.position.z - P().z) < R) add('Робот-уборщик · 95 %', () => [robo.g.position.x, 0, robo.g.position.z, 0.7], null, 1);
+    if (robo && Math.hypot(robo.g.position.x - P().x, robo.g.position.z - P().z) < R) add('Робот-уборщик 95 %', () => [robo.g.position.x, 0, robo.g.position.z, 0.7], null, 1);
     for (const r of couriers) {
-      if (Math.hypot(r.g.position.x - P().x, r.g.position.z - P().z) < R) add(`Робот-доставщик · ${93 + Math.floor(Math.random() * 6)} %`, () => [r.g.position.x, 0, r.g.position.z, 1.3], null, 0.9);
+      if (Math.hypot(r.g.position.x - P().x, r.g.position.z - P().z) < R) add(`Робот-доставщик ${93 + Math.floor(Math.random() * 6)} %`, () => [r.g.position.x, 0, r.g.position.z, 1.3], null, 0.9);
     }
     for (const dcy of L.decoys || []) {
       if (Math.hypot(dcy.x - cam.x, dcy.z - cam.z) > 9) continue;

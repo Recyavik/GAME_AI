@@ -60,7 +60,7 @@ export default function incomingCall(el, d, api) {
       // …и игрок сам звонит маме по номеру из своих контактов.
       const state = h('div', { class: 'call-state' }, 'вызов…');
       screen.replaceChildren(
-        h('div', { class: 'call-who' }, h('span', { class: 'call-ava mom' }, 'М'), h('b', {}, d.callbackName || 'Мама'), h('span', {}, 'мой контакт · исходящий')),
+        h('div', { class: 'call-who' }, h('span', { class: 'call-ava mom' }, 'М'), h('b', {}, d.callbackName || 'Мама'), h('span', {}, 'мой контакт, исходящий')),
         state,
       );
       for (let i = 0; i < 2; i++) { if (!alive) return; api.sound.play('beep'); await wait(800); }

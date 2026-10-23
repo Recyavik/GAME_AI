@@ -94,8 +94,9 @@ async function sendFile(req, res, file) {
   const headers = {
     'Content-Type': TYPES[ext] || 'application/octet-stream',
     ETag: entry.etag,
-    // HTML проверяем каждый раз (свежая версия игры), остальное кешируем на неделю.
-    'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=604800',
+    // Страницы, стили и скрипты браузер сверяет с сервером при каждом открытии (ETag) — после обновления
+    // сайта все сразу видят новую версию. Картинки и шрифты меняются редко — кешируем на неделю.
+    'Cache-Control': ['.html', '.css', '.js', '.json'].includes(ext) ? 'no-cache' : 'public, max-age=604800',
     'X-Content-Type-Options': 'nosniff',
     'Referrer-Policy': 'strict-origin-when-cross-origin',
     Vary: 'Accept-Encoding',

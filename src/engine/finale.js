@@ -17,8 +17,8 @@ export function showFinale(sc, progress, hero, ctx) {
   // Расшифровка очков: из чего сложилось.
   let shieldPts = 0;
   for (const v of p.shields.values()) shieldPts += v;
-  const scoreLine = `Очки: карточки ${p.cards.size * 2} из ${p.cardsTotal * 2} · щиты ${shieldPts} из ${p.shieldsTotal * 2} (с ошибками — 1 очко за щит) · листовки ${p.rumorsFirst * 2} из ${p.rumorsTotal * 2} (только с первой попытки)` +
-    (sc.eyes?.bonus ? ` · зарядка для глаз ${p.bonus.get('eyes') || 0} из ${sc.eyes.bonus}` : '');
+  const scoreLine = `Очки: карточки ${p.cards.size * 2} из ${p.cardsTotal * 2}; щиты ${shieldPts} из ${p.shieldsTotal * 2} (с ошибками — 1 очко за щит); листовки ${p.rumorsFirst * 2} из ${p.rumorsTotal * 2} (только с первой попытки)` +
+    (sc.eyes?.bonus ? `; зарядка для глаз ${p.bonus.get('eyes') || 0} из ${sc.eyes.bonus}` : '');
   const wrap = h('div', { class: 'overlay finale-wrap' },
     h('div', { class: 'finale' },
       h('div', { class: 'fin-scroll' },
@@ -42,7 +42,7 @@ export function showFinale(sc, progress, hero, ctx) {
           h('button', { class: 'btn small', onclick: () => saveMemoPng(sc.memo?.title || 'Памятка', memoLines) }, 'Сохранить памятку (PNG)'),
         ),
         sc.achievements?.length && h('div', { class: 'fin-ach' },
-          h('div', { class: 'fin-h' }, `Достижения · ${p.ach.size} из ${sc.achievements.length}`),
+          h('div', { class: 'fin-h' }, `Достижения: ${p.ach.size} из ${sc.achievements.length}`),
           h('div', { class: 'medals' }, sc.achievements.map((a) => {
             const got = p.ach.has(a.id);
             return h('div', { class: 'medal-cell' + (got ? '' : ' off'), title: got ? a.title : a.hint },

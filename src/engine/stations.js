@@ -1,7 +1,7 @@
 // Станция: окно поверх сцены с одним или несколькими шагами-виджетами.
 //
 // station = {
-//   title: 'Станция 1 · Лица',
+//   title: 'Станция 1: Лица',
 //   kind: 'how' | 'protect' | 'extra',   // how/protect — индикатор «① Как работает → ② Как защититься»
 //   steps: [{ widget, data }, …]  (или widget + data),
 //   shield: 's_photo',                    // для protect: в конце — карточка правила «Взять щит»
@@ -87,7 +87,7 @@ export function runStation(station, ctx = {}) {
       body.replaceChildren(
         h('div', { class: 'rule-card' },
           s.icon ? h('img', { class: 'rule-icon', src: s.icon, alt: '' }) : h('span', { class: 'rule-icon' }, shieldSvg()),
-          h('div', { class: 'rule-kicker' }, `Щит · ${s.title || ''}`),
+          h('div', { class: 'rule-kicker' }, `Щит: ${s.title || ''}`),
           h('div', { class: 'rule-text', html: rich(s.ruleFull || s.rule || '') }),
           s.why && h('div', { class: 'rule-why', html: '<b>Почему:</b> ' + rich(s.why) }),
           h('div', { class: 'rule-pts' }, pts === 2 ? 'Без ошибок — 2 очка' : 'Были ошибки — 1 очко. Щит всё равно твой!'),

@@ -8,11 +8,11 @@
   <meta name="theme-color" content="#6e4bff">
   <meta property="og:title" content="Фестиваль ИИ: правда и слухи">
   <meta property="og:description" content="3D-квест о том, как безопасно общаться с искусственным интеллектом. Возраст 11+. Без регистрации, прямо в браузере.">
-  <meta property="og:image" content="/img/posters/poster_festival_wide.webp">
+  <meta property="og:image" content="/media/hero-1280.webp">
   <link rel="icon" href="/img/owl/owl_happy.webp" type="image/webp">
   <link rel="preload" href="/fonts/unbounded-cyrillic-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.css">
-  <script type="module" src="/app.js"></script>
+  <link rel="stylesheet" href="/styles.css?v=3">
+  <script type="module" src="/app.js?v=3"></script>
 </head>
 <body>
   <a class="skip" href="#student">К описанию игры</a>
@@ -35,7 +35,7 @@
     <!-- ===== Для ученика ===== -->
     <section class="hero" id="student">
       <div class="hero-text reveal">
-        <p class="plaque">3D-квест · 11+</p>
+        <p class="plaques"><span class="plaque">3D-квест</span><span class="plaque alt">11+</span></p>
         <h1>Фестиваль ИИ: <span>правда и слухи</span></h1>
         <p class="lead">
           По школе расклеены листовки: «ИИ живой! Он всё знает и захватит школу!» Пятиклассники боятся
@@ -50,14 +50,10 @@
           <a class="btn btn-go" href="/game/TEMA_1.html">Вперёд! <span aria-hidden="true">→</span></a>
           <a class="btn btn-ghost" href="#teacher">Подробнее</a>
         </div>
-        <p class="note">Без регистрации · прямо в браузере · играй когда захочешь — прогресс сохранится на этом устройстве</p>
-        <p class="counter hidden" id="counter" aria-live="polite">
-          <span class="counter-ico" aria-hidden="true">🎮</span>
-          В игру сыграли: <b id="counter-num">0</b>
-        </p>
+        <p class="note">Без регистрации, прямо в браузере. Играй когда захочешь: прогресс сохранится на этом устройстве.</p>
       </div>
       <figure class="hero-art reveal">
-        <img src="/img/posters/poster_festival_wide.webp" alt="Совёнок, школьники и роботы на празднике" width="640" height="427">
+        <img src="/media/hero-1280.webp" srcset="/media/hero-768.webp 768w, /media/hero-1280.webp 1280w" sizes="(max-width: 900px) 100vw, 50vw" alt="Ника и Тима идут по школьному двору на Фестиваль ИИ, рядом едут роботы-доставщики с почтой и книгами" width="1280" height="853" fetchpriority="high">
         <img class="hero-owl" src="/img/owl/owl_happy.webp" alt="" width="160" height="160">
       </figure>
     </section>
@@ -67,6 +63,7 @@
       <div><b>7</b><span>щитов безопасности</span></div>
       <div><b>14</b><span>героев</span></div>
       <div><b>0</b><span>регистраций</span></div>
+      <div class="hidden" id="counter" aria-live="polite"><b id="counter-num">0</b><span>в игру играли</span></div>
     </section>
 
     <!-- ===== Как играть ===== -->
@@ -201,12 +198,11 @@
         <article><h3>Node.js и Docker</h3><p>Этот сайт: небольшой сервер без зависимостей (сжатие brotli/gzip, счётчик посещений) в контейнере.</p></article>
         <article><h3>Проверки</h3><p>Проверка данных сценария и сквозной тест: puppeteer проходит игру от титула до финала в настоящем браузере.</p></article>
       </div>
-      <p class="reveal"><a class="btn btn-ghost" href="https://github.com/Recyavik/GAME_AI" target="_blank" rel="noopener">Исходный код на GitHub</a></p>
     </section>
   </main>
 
   <footer class="foot">
-    <p><b>Корпорация «1Т»</b> · <span id="year">2026</span></p>
+    <p><b>Корпорация «1Т»</b>, <span id="year">2026</span></p>
     <p class="muted">Самостоятельная игра о безопасном общении с искусственным интеллектом. Все персонажи и школа выдуманные.</p>
   </footer>
 

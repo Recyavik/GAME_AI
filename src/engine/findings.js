@@ -41,7 +41,7 @@ export class Progress {
   giveBonus(id, pts, text) {
     if (this.bonus.has(id)) return false;
     this.bonus.set(id, pts);
-    toast(`<b>Бонус +${pts}</b> · ${esc(text)}`, 'find', 3500, { html: true });
+    toast(`<b>Бонус +${pts}:</b> ${esc(text)}`, 'find', 3500, { html: true });
     this.onChange?.('bonus');
     return true;
   }
@@ -85,7 +85,7 @@ export class Progress {
     if (!s) { console.warn('Нет щита', id); return false; }
     this.shields.set(id, points);
     sound.play('shield');
-    toast(`<div class="toast-shield">${s.icon ? `<img src="${s.icon}" alt="">` : ''}<div><b>Новый щит · ${esc(s.title)}</b><br>${points === 2 ? '+2 очка' : '+1 очко'}</div></div>`, 'shield', 3800, { html: true });
+    toast(`<div class="toast-shield">${s.icon ? `<img src="${s.icon}" alt="">` : ''}<div><b>Новый щит: ${esc(s.title)}</b><br>${points === 2 ? '+2 очка' : '+1 очко'}</div></div>`, 'shield', 3800, { html: true });
     this.onChange?.('shield');
     return true;
   }
@@ -158,7 +158,7 @@ export class Progress {
       const btn = h('button', { class: 'btn' }, 'Закрыть');
       const wrap = h('div', { class: 'overlay' },
         h('div', { class: 'modal rumor-modal' },
-          h('div', { class: 'spot-place' }, `Листовка Гоши · ${s.place}`),
+          h('div', { class: 'spot-place' }, `Листовка Гоши: ${s.place}`),
           h('div', { class: 'leaflet' }, h('b', {}, 'СЛУХ!'), h('div', { html: rich(s.text) }), stamp),
           h('h3', {}, 'Правда или слух?'),
           opts, why,
@@ -178,10 +178,10 @@ export class Progress {
   // Блокнот корреспондента: вкладки «Карточки правды», «Щиты», «Энциклопедия».
   notebook(tab = 'cards') {
     const tabs = [
-      ['cards', `Карточки правды · ${this.cards.size}/${this.cardsTotal}`],
-      ['shields', `Щиты · ${this.shields.size}/${this.shieldsTotal}`],
+      ['cards', `Карточки правды ${this.cards.size}/${this.cardsTotal}`],
+      ['shields', `Щиты ${this.shields.size}/${this.shieldsTotal}`],
     ];
-    if (this.factList.length) tabs.push(['facts', `Энциклопедия · ${this.facts.size}/${this.factList.length}`]);
+    if (this.factList.length) tabs.push(['facts', `Энциклопедия ${this.facts.size}/${this.factList.length}`]);
     const body = h('div', { class: 'nb-body' });
     const head = h('div', { class: 'nb-tabs' });
     const show = (t) => {
