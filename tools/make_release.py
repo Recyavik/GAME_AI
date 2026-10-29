@@ -6,6 +6,7 @@
     python tools/make_release.py l10-57-pass     # только указанные игры
     python tools/make_release.py --with файл.md  # добавить файл (задание, заметку) в папку «Задания/»
     python tools/make_release.py --site          # + папка «Сайт/»: всё для docker compose up (страница, сервер, игра)
+    python tools/make_release.py --show          # + папка «Показ/»: пульт докладчика и экран с автопоказом игры
     python tools/make_release.py --check dist/x.html   # проверить файл на внешние ссылки
 
 Правила выпуска:
@@ -92,6 +93,22 @@ def site_files() -> list[tuple[Path, str]]:
     return out
 
 
+# Показ для выступления (PRESINTATION): запуск, сценарий, слайды и приложение без инструментов разработки.
+SHOW = ROOT / "PRESINTATION"
+
+
+def show_files() -> list[tuple[Path, str]]:
+    out = []
+    for f in ["Запустить показ.bat", "КАК_ПОКАЗЫВАТЬ.txt", "scenario_autoplay.json"]:
+        out.append((SHOW / f, f"Показ/{f}"))
+    for d in ["slides_2k", "app/public", "app/data", "app/vendor"]:
+        for f in sorted((SHOW / d).rglob("*")):
+            if f.is_file():
+                out.append((f, "Показ/" + f.relative_to(SHOW).as_posix()))
+    out.append((SHOW / "app/server.mjs", "Показ/app/server.mjs"))
+    return out
+
+
 def main() -> None:
     args = sys.argv[1:]
     if args[:1] == ["--check"]:
@@ -111,9 +128,14 @@ def main() -> None:
     site = "--site" in args
     if site:
         args.remove("--site")
+    show = "--show" in args
+    if show:
+        args.remove("--show")
     files = collect(args)
     if site:
         files += site_files()
+    if show:
+        files += show_files()
     for e in extra:
         if not e.exists():
             sys.exit(f"Нет файла {e}")
